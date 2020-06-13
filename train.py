@@ -13,13 +13,13 @@ from utils import pprint, set_gpu, ensure_path, Averager, Timer, count_acc, eucl
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--max-epoch', type=int, default=1000)
-    parser.add_argument('--save-epoch', type=int, default=20)
-    parser.add_argument('--shot', type=int, default=1)
-    parser.add_argument('--query', type=int, default=1)
+    parser.add_argument('--max-epoch', type=int, default=5)
+    parser.add_argument('--save-epoch', type=int, default=5)
+    parser.add_argument('--shot', type=int, default=5)
+    parser.add_argument('--query', type=int, default=5)
     parser.add_argument('--train-way', type=int, default=11)
     parser.add_argument('--test-way', type=int, default=11)
-    parser.add_argument('--save-path', default='./save/proto-1')
+    parser.add_argument('--save-path', default='./save/proto-new1')
     parser.add_argument('--gpu', default='0')
     args = parser.parse_args()
     pprint(vars(args))
@@ -34,7 +34,7 @@ if __name__ == '__main__':
                               num_workers=8, pin_memory=True)
 
     valset = MyDataset('val')
-    val_sampler = CategoriesSampler(valset.label, 10,
+    val_sampler = CategoriesSampler(valset.label, 15,
                                     args.test_way, args.shot + args.query)
     val_loader = DataLoader(dataset=valset, batch_sampler=val_sampler,
                             num_workers=8, pin_memory=True)

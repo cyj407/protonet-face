@@ -12,11 +12,11 @@ from utils import pprint, set_gpu, count_acc, Averager, euclidean_metric
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--gpu', default='0')
-    parser.add_argument('--load', default='./save/proto-1/max-acc.pth')
-    parser.add_argument('--batch', type=int, default=22)
+    parser.add_argument('--load', default='./save/proto-new1/max-acc.pth')
+    parser.add_argument('--batch', type=int, default=1)
     parser.add_argument('--way', type=int, default=11)
     parser.add_argument('--shot', type=int, default=1)
-    parser.add_argument('--query', type=int, default=1)
+    parser.add_argument('--query', type=int, default=0)
     args = parser.parse_args()
     pprint(vars(args))
 
@@ -35,6 +35,8 @@ if __name__ == '__main__':
     ave_acc = Averager()
 
     for i, batch in enumerate(loader, 1):
+        print(batch)
+
         data, _ = [_.cuda() for _ in batch]
         k = args.way * args.shot
         data_shot, data_query = data[:k], data[k:]

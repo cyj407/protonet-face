@@ -1,13 +1,13 @@
 import os.path as osp
-
+import os
 from PIL import Image
 
 setname = 'train'
-ROOT_PATH = './dataset/'
+ROOT_PATH = osp.join(os.getcwd(), 'dataset')
 
-csv_path = osp.join(ROOT_PATH, setname + '.csv')
+csv_path = osp.join( ROOT_PATH, setname + '.csv')
+print(csv_path)
 lines = [x.strip() for x in open(csv_path, 'r').readlines()][1:]
-print(lines[-1])
 
 data = []
 label = []
@@ -17,13 +17,19 @@ wnids = []
 
 for l in lines:
     fname, flabel = l.split(',')
-    seg = fname.rsplit('/')
-    fname = osp.join(seg[1], seg[2])
-    path = osp.join(ROOT_PATH, 'images', fname)
+    # seg = fname.rsplit(os.sep)
+    # print(fname)
+    # print(osp.join('.\dataset', fname))
+
+    fpath = os.path.normpath(ROOT_PATH + fname)
+    # fpath = osp.join(ROOT_PATH, fname)
+    # print(ROOT_PATH)
     if flabel not in wnids:
         wnids.append(flabel)
         lb += 1
-    data.append(path)
+
+    data.append(fpath)
     label.append(lb)
 
-img = Image.open(path).convert('RGB')
+    img = Image.open(fpath).convert('RGB')
+    # break

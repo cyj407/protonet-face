@@ -24,9 +24,10 @@ class MyDataset(Dataset):
 
         for l in lines:
             fname, flabel = l.split(',')
-            seg = fname.rsplit('/')
-            fname = osp.join(seg[1], seg[2])
-            path = osp.join(ROOT_PATH, 'images', fname)
+            # seg = fname.rsplit('/')
+            # fname = osp.join(seg[1], seg[2])
+            path = os.path.normpath(ROOT_PATH + fname)
+            # path = osp.join(os.getcwd(), 'dataset', fname)
             if flabel not in wnids:
                 wnids.append(flabel)
                 lb += 1
