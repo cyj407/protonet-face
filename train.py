@@ -13,8 +13,8 @@ from utils import pprint, set_gpu, ensure_path, Averager, Timer, count_acc, eucl
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--max-epoch', type=int, default=10)
-    parser.add_argument('--save-epoch', type=int, default=10)
+    parser.add_argument('--max-epoch', type=int, default=1000)
+    parser.add_argument('--save-epoch', type=int, default=20)
     parser.add_argument('--shot', type=int, default=1)
     parser.add_argument('--query', type=int, default=1)
     parser.add_argument('--train-way', type=int, default=11)
