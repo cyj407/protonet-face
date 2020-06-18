@@ -1,10 +1,15 @@
 import argparse
 import os.path as osp
+import os
 import random
 import numpy as np
 import torch
 import torch.nn.functional as F
 from torch.utils.data import DataLoader
+from torchvision import transforms
+from PIL import Image
+
+from torch.utils.data import Dataset
 from mydataset import MyDataset
 from samplers import TrainSampler
 from protonet import Protonet
@@ -12,12 +17,12 @@ from utils import pprint, set_gpu, ensure_path, Averager, Timer, count_acc, eucl
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--max-epoch', type=int, default=200)
-    parser.add_argument('--save-epoch', type=int, default=50)
+    parser.add_argument('--max-epoch', type=int, default=500)
+    parser.add_argument('--save-epoch', type=int, default=100)
     parser.add_argument('--shot', type=int, default=5)
     parser.add_argument('--query', type=int, default=1)
-    parser.add_argument('--way', type=int, default=20)
-    parser.add_argument('--save-path', default='./save/proto-5-ttt')
+    parser.add_argument('--way', type=int, default=21)
+    parser.add_argument('--save-path', default='./save/proto-me-500')
     parser.add_argument('--gpu', default='0')
     args = parser.parse_args()
     pprint(vars(args))
@@ -25,13 +30,13 @@ if __name__ == '__main__':
     set_gpu(args.gpu)
     ensure_path(args.save_path)
 
-    trainset = MyDataset('train', './data20_v2/')
+    trainset = MyDataset('train', './data20_me/')
     train_sampler = TrainSampler(trainset.label, 25,
                                       args.way, args.shot + args.query)
     train_loader = DataLoader(dataset=trainset, batch_sampler=train_sampler,
                               pin_memory=True)
 
-    valset = MyDataset('val', './data20_v2/')
+    valset = MyDataset('val','./data20_me/')
     val_sampler = TrainSampler(valset.label, 50,
                                     args.way, args.shot + args.query)
     val_loader = DataLoader(dataset=valset, batch_sampler=val_sampler,
@@ -99,7 +104,6 @@ if __name__ == '__main__':
 
         for i, batch in enumerate(val_loader, 1):
             data, _ = [_.cuda() for _ in batch]
-            # data, _ = [_.to(device) for _ in batch]
             data_shot, data_query = data[:cut], data[cut:]
 
             proto = model(data_shot)

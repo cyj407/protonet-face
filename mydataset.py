@@ -1,40 +1,36 @@
-import os.path as osp
 from PIL import Image
-
 from torch.utils.data import Dataset
 from torchvision import transforms
 import ntpath
 import os
-
-
-ROOT_PATH = './dataset/'
-
+import cv2
 
 class MyDataset(Dataset):
 
-    def __init__(self, setname):
-        csv_path = osp.join(ROOT_PATH, setname + '.csv')
+    def __init__(self, setname, root_path):
+        csv_path = os.path.join(root_path, setname + '.csv')
         lines = [x.strip() for x in open(csv_path, 'r').readlines()][1:]
 
         data = []
         label = []
         lb = -1
+        label_name = []
 
         wnids = []
 
         for l in lines:
             fname, flabel = l.split(',')
-            seg = fname.rsplit('/')
-            fname = osp.join(seg[1], seg[2])
-            path = osp.join(ROOT_PATH, 'images', fname)
+            path = os.path.normpath(root_path + fname)
             if flabel not in wnids:
                 wnids.append(flabel)
                 lb += 1
+                label_name.append(flabel)
             data.append(path)
             label.append(lb)
 
         self.data = data
         self.label = label
+        self.label_name = label_name
 
         self.transform = transforms.Compose([
             transforms.Resize(84),
