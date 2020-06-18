@@ -2,13 +2,17 @@ import os
 import shutil
 import time
 import pprint
-
+import tensorflow as tf
 import torch
+from tensorflow.compat.v1 import ConfigProto
+from tensorflow.compat.v1 import InteractiveSession
 
 
 def set_gpu(x):
     os.environ['CUDA_VISIBLE_DEVICES'] = x
-    print('using gpu:', x)
+    config = ConfigProto()
+    config.gpu_options.allow_growth = True
+    session = InteractiveSession(config=config)
 
 
 def ensure_path(path):
@@ -59,12 +63,13 @@ class Timer():
 
     def measure(self, p=1):
         x = (time.time() - self.o) / p
+        if(x < 60):
+            return '{0:.3f}s'.format(x)
         x = int(x)
         if x >= 3600:
             return '{:.1f}h'.format(x / 3600)
         if x >= 60:
             return '{}m'.format(round(x / 60))
-        return '{}s'.format(x)
 
 _utils_pp = pprint.PrettyPrinter()
 def pprint(x):
