@@ -14,31 +14,34 @@ from utils import pprint, set_gpu, count_acc, Averager, euclidean_metric
 
 modelFile = "./detect_model/res10_300x300_ssd_iter_140000.caffemodel"
 configFile = "./detect_model/deploy.prototxt.txt"
+haarFile = "./detect_model/haarcascade_frontalface_default.xml"
 net = cv2.dnn.readNetFromCaffe(configFile, modelFile)
 path = os.getcwd() + '\\res\\'
 savePath = os.getcwd() + '\\data\\'
 
 
-def markFace(img_path, color):
-    frame = cv2.imread(img_path)
-    path = 'D:\\python\\Lib\\site-packages\\cv2\\data\\'
-    face_cascade = cv2.CascadeClassifier(path + 'haarcascade_frontalface_default.xml')
-    faces = face_cascade.detectMultiScale( frame, 1.3, 5)
-    for (x, y, w, h) in faces:
-        cv2.rectangle(frame, (x, y), (x+w, y+h), color, 5)
-        return frame
+# def markFace(img_path, color):
+#     frame = cv2.imread(img_path)
+#     # path = 'D:\\python\\Lib\\site-packages\\cv2\\data\\'
+#     # face_cascade = cv2.CascadeClassifier(path + 'haarcascade_frontalface_default.xml')
+#     face_cascade = cv2.CascadeClassifier(haarFile)
+#     faces = face_cascade.detectMultiScale( frame, 1.3, 5)
+#     for (x, y, w, h) in faces:
+#         cv2.rectangle(frame, (x, y), (x+w, y+h), color, 5)
+#         return frame
 
 
-def detectFace(f_path):
-    frame = cv2.imread(f_path)
-    path = 'D:\\python\\Lib\\site-packages\\cv2\\data\\'
-    face_cascade = cv2.CascadeClassifier(path + 'haarcascade_frontalface_default.xml')
-    faces = face_cascade.detectMultiScale( frame, 1.3, 5)
-    for (x,y,w,h) in faces:
-        roi_color = frame[y:y+h, x:x+w]
-        roi_color = cv2.resize(roi_color, (90, 90))
-        cv2.imwrite("face_" + f_path,roi_color)
-        return "face_" + f_path
+# def detectFace(f_path):
+#     frame = cv2.imread(f_path)
+#     # path = 'D:\\python\\Lib\\site-packages\\cv2\\data\\'
+#     # face_cascade = cv2.CascadeClassifier(path + 'haarcascade_frontalface_default.xml')
+#     face_cascade = cv2.CascadeClassifier(haarFile)
+#     faces = face_cascade.detectMultiScale( frame, 1.3, 5)
+#     for (x,y,w,h) in faces:
+#         roi_color = frame[y:y+h, x:x+w]
+#         roi_color = cv2.resize(roi_color, (90, 90))
+#         cv2.imwrite("face_" + f_path,roi_color)
+#         return "face_" + f_path
 
 
 transform = transforms.Compose([
@@ -92,8 +95,9 @@ def real_time_detect_dnn(frame):
 
 
 def real_time_detect_haar(frame):
-    path = 'D:\\python\\Lib\\site-packages\\cv2\\data\\'
-    face_cascade = cv2.CascadeClassifier(path + 'haarcascade_frontalface_default.xml')
+    # path = 'D:\\python\\Lib\\site-packages\\cv2\\data\\'
+    # face_cascade = cv2.CascadeClassifier(path + 'haarcascade_frontalface_default.xml')
+    face_cascade = cv2.CascadeClassifier(haarFile)
     faces = face_cascade.detectMultiScale( frame, 1.3, 5)
     for (x,y,w,h) in faces:
         roi_color = frame[y:y+h, x:x+w]
@@ -102,7 +106,7 @@ def real_time_detect_haar(frame):
         shot_name = "realtime_save\\face.jpg"
         cv2.imwrite( shot_name, roi_color)
         target = image_loader(shot_name)
-        cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 3)
+        cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
         return target
     return None
 

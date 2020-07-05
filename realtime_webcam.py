@@ -43,7 +43,7 @@ def getDataset(each_class_num):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     # parser.add_argument('--gpu', default='1')
-    parser.add_argument('--load', default='./save/proto-me-500/max-acc.pth')
+    parser.add_argument('--load', default='./save/proto-me-200/max-acc.pth')
     # parser.add_argument('--batch', type=int, default=1)
     parser.add_argument('--way', type=int, default=21)
     parser.add_argument('--shot', type=int, default=5)
@@ -92,12 +92,12 @@ if __name__ == '__main__':
             max_dis = logits[-1][max_dis_idx]
             sum_dis = logits[-1].sum()
             other_avr_dis = (sum_dis - logits[-1][max_dis_idx]) / (args.way -1)
-            # print('max distance: {}, other distance average: {}'.format(
-                # max_dis, other_avr_dis))
-            # if(max_dis - other_avr_dis < 20):
-                # text = 'Unknown'
-            # else:
-            text = samplers.ground_truth[max_dis_idx]
+            # print('max - other distance: {}'.format(
+            #     max_dis - other_avr_dis))
+            if(max_dis - other_avr_dis >= 10):
+                text = samplers.ground_truth[max_dis_idx]
+            else:
+                text = 'Unknown'
             cv2.putText(frame, text, (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1.8, (0, 255, 255), 3)
 
         cv2.imshow('frame', frame)

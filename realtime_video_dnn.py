@@ -53,7 +53,7 @@ if __name__ == '__main__':
     # open camera
     path = 'videos/trump.mp4'
     cap = cv2.VideoCapture(path)
-    cv2.namedWindow('demo_video')
+    cv2.namedWindow('demo_video_DNN')
 
     while(cap.isOpened()):
         
@@ -77,9 +77,9 @@ if __name__ == '__main__':
             text = samplers.ground_truth[max_dis_idx]
             # else:
                 # text = 'Unknown'
-            cv2.putText(frame, text, (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 255), 2)
+            cv2.putText(frame, text, (10, 340), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
         
-        cv2.imshow('demo_video', frame)
+        cv2.imshow('demo_video_DNN', frame)
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
     

@@ -17,12 +17,12 @@ from utils import pprint, set_gpu, ensure_path, Averager, Timer, count_acc, eucl
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--max-epoch', type=int, default=500)
-    parser.add_argument('--save-epoch', type=int, default=100)
+    parser.add_argument('--max-epoch', type=int, default=200)
+    parser.add_argument('--save-epoch', type=int, default=50)
     parser.add_argument('--shot', type=int, default=5)
     parser.add_argument('--query', type=int, default=1)
     parser.add_argument('--way', type=int, default=21)
-    parser.add_argument('--save-path', default='./save/proto-me-500')
+    parser.add_argument('--save-path', default='./save/proto-me-200')
     parser.add_argument('--gpu', default='0')
     args = parser.parse_args()
     pprint(vars(args))

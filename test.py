@@ -30,7 +30,7 @@ if __name__ == '__main__':
         query = 1
         load_path = "./save/proto-" + str(shot) + "-200/max-acc.pth"
 
-        dataset = MyDataset('test')
+        dataset = MyDataset('test', './data20_v2/')
         sampler = TestSampler(dataset.label, 100, way, shot + query)
         loader = DataLoader(dataset, batch_sampler=sampler,
                             num_workers=8,
